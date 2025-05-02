@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Report</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        .navbar {
+            background-color: #2b2e4a;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        h1 {
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+        }
+        .status-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-message.not-sent {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .status-message.neutral {
+            background-color: #e2e3e5;
+            color: #41464b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h2>Cubexo | Payslip Generator</h2>
+    <div>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Status Report</h1>
+    <ul style="list-style-type: none; padding-left: 0;">
+        {% for message in status_messages %}
+            <li class="status-message 
+                {% if 'Payslip emailed to the employee' in message %}
+                    success
+                {% elif 'not emailed as requested' in message %}
+                    not-sent
+                {% elif 'not sent' in message or 'Email not provided' in message %}
+                    warning
+                {% elif 'Error' in message or 'failed' in message %}
+                    error
+                {% else %}
+                    neutral
+                {% endif %}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>

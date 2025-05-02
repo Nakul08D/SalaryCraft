@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cubexo | Payslip Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f9f9fb;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #2b2e4a;
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #2b2e4a;
+        }
+
+        p {
+            font-size: 16px;
+            color: #6c6f7e;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            padding: 12px;
+            width: 100%;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            background-color: #f5f6fa;
+        }
+
+        button {
+            background-color: #2b2e4a;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #464866;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Payslip Generator</h2>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>Payslip Generator</h1>
+        <p>Upload your CSV file to generate payslips instantly</p>
+    
+        <form action="/generate-payslips/" method="post" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <input type="hidden" name="token" value="{{ token }}">
+            <br>
+            <button type="submit">Generate Payslips</button>
+        </form>
+    
+        <footer>Powered by Cubexo | HR Automation Tool</footer>
+    </div>
+    
+</body>
+</html>
+

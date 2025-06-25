@@ -16,7 +16,6 @@ load_dotenv()
 OUTPUT_DIR = "generated_payslips"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-
 async def save_and_generate_pdf(csv_file: UploadFile) -> List[str]:
     status_messages = []
 
@@ -43,15 +42,19 @@ async def save_and_generate_pdf(csv_file: UploadFile) -> List[str]:
                 status_messages.append(f"{record.get('Name', f'Employee_{i+1}')}: Error processing DOCX template: {str(e)}")
                 continue
 
+            # Normalize employee name and month
             employee_name = record.get('Name', f"Employee_{i+1}").replace(" ", "_")
             month = record.get('Month', 'Payslip').replace(" ", "_")
             docx_filename = f"{employee_name}_Salary_Slip_{month}.docx"
 
+            # Determine destination folder
             send_mail_flag = record.get('Send_Mail', '').strip().lower()
             email = record.get("Email")
 
-            target_dir = "not_sent_payslips" if send_mail_flag == 'no' else "generated_payslips"
+            base_dir = "not_sent_payslips" if send_mail_flag == 'no' else "generated_payslips"
+            target_dir = os.path.join(base_dir, employee_name)
 
+            # Create directory
             try:
                 os.makedirs(target_dir, exist_ok=True)
                 docx_path = os.path.join(target_dir, docx_filename)
@@ -60,6 +63,7 @@ async def save_and_generate_pdf(csv_file: UploadFile) -> List[str]:
                 status_messages.append(f"{employee_name}: Error saving DOCX file: {str(e)}")
                 continue
 
+            # Convert to PDF
             try:
                 pdf_path = docx_path.replace(".docx", ".pdf")
                 convert_docx_to_pdf(docx_path, pdf_path)
@@ -73,6 +77,7 @@ async def save_and_generate_pdf(csv_file: UploadFile) -> List[str]:
                 status_messages.append(f"{employee_name}: Error during PDF conversion or DOCX cleanup: {str(e)}")
                 continue
 
+            # Send email if required
             if send_mail_flag != 'no':
                 if email:
                     try:
@@ -122,6 +127,5 @@ def send_email_with_pdf(receiver_email, subject, body, pdf_path):
             smtp.login(sender_email, sender_password)
             smtp.send_message(msg)
 
-        print(f"Payslip sent to {receiver_email}")
     except Exception as e:
         print(f"Failed to send to {receiver_email}: {e}")

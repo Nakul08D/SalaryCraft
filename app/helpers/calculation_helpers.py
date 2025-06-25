@@ -17,7 +17,7 @@ def calculate_derived_fields(record: Dict[str, str]) -> Dict[str, str]:
         total_earnings = sum(to_float(record.get(k, 0)) for k in earnings_keys)
         total_deductions = sum(to_float(record.get(k, 0)) for k in deductions_keys)
         basic = to_float(record.get('Basic'))
-        net_salary = basic - total_deductions
+        net_salary = total_earnings - total_deductions
 
         try:
             net_salary_words = num2words(net_salary, to='currency', lang='en_IN').replace('euro', 'rupees').title() + " Only"

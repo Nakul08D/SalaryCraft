@@ -26,6 +26,11 @@ async def show_login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
+@router.get("/user-register")
+async def show_register_form(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
 @router.post("/register")
 async def register_user_form(
     request: Request,
@@ -46,7 +51,6 @@ async def register_user_form(
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-
     return RedirectResponse(url="/login", status_code=303)
 
 
@@ -60,6 +64,7 @@ async def login_user(
     try:
         user = db.query(User).filter(User.email == email).first()
         if not user or not verify_password(password, user.hashed_password):
+
             return templates.TemplateResponse("login.html", {
                 "request": request,
                 "error": "Invalid email or password"
@@ -109,6 +114,7 @@ async def generate_payslips(
 def get_all_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
+
 
 @router.get("/logout")
 async def logout():
